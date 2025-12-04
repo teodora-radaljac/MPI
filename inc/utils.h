@@ -6,6 +6,11 @@
 #define PORT_FILE_NAME "port.txt"
 #define MAX_PROCS 128
 
+#define REPORT_SIZE 0x4A0 // 1184 bytes
+#define REPORT_DATA 64
+#define SKIP 0x20 
+#define SEV_GUEST_DEV "/dev/sev-guest"
+
 #define AUTH "auth"
 #define NO_TLS "noTLS"
 #define TLS "TLS"
@@ -42,6 +47,7 @@ typedef struct
 typedef struct
 {
   int nonce_server;
+  char server_data[REPORT_DATA];
 } AuthServerHello;
 
 typedef struct
@@ -49,6 +55,8 @@ typedef struct
   int worker_id;
   int nonce_client;
   int nonce_server;
+  char server_data[REPORT_DATA];
+  char report[REPORT_SIZE];
   int proof;
 } AuthProof;
 

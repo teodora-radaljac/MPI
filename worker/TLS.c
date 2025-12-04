@@ -17,6 +17,16 @@ static void secure_recv_task(int *x, MPI_Comm comm)
     *x = enc ^ g_session_key;
 }
 
+int fetch_report_tls(AuthProof *p, char *data) {
+    int ret = fetch_attestation_report(data, p->report);
+    if (ret != 0) {
+        fprintf(stderr, "[MASTER] fetch_attestation_report failed\n");
+        return -1;
+    }
+
+    return 0;
+}
+
 void worker_TLS(const char *port, const int wr)
 {
     setvbuf(stdout, NULL, _IONBF, 0);
@@ -46,6 +56,11 @@ void worker_TLS(const char *port, const int wr)
 
     // 3) Izračunaj "proof" (fake, XOR sa tajnom)
     int SECRET = 0x12345678; // isti kao u master.c
+
+    rc = fetch_report_tls(&p, sh.server_data);
+    if (rc != 0) {
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
 
     p.worker_id = ch.worker_id;
     p.nonce_client = ch.nonce_client;
