@@ -10,7 +10,7 @@ WORKER_DIR := worker
 
 CC      := mpicc
 CFLAGS  := -Wall -Wextra -O2 -std=gnu11 -I$(INC_DIR)
-LDFLAGS :=
+LDFLAGS := -lcrypto
 
 MASTER_SRCS := $(wildcard $(MASTER_DIR)/*.c)
 WORKER_SRCS := $(wildcard $(WORKER_DIR)/*.c)
